@@ -35,6 +35,10 @@ opts.Add(BoolVariable('V',
                       'Verbose build',
                       False))
 
+opts.Add('STATIC_LIBC_ROOT',
+         'Set the path to a static libc',
+         '')
+
 opts.Add('TOOLCHAIN',
          'Set toolchain for cross compilation (e.g. arm-linux-gnueabihf)',
          '')
@@ -70,6 +74,10 @@ Help(opts.GenerateHelpText(clean_envs))
 if env['TOOLCHAIN'] != '':
     env['CC'] = env['TOOLCHAIN'] + '-gcc'
     env['AR'] = env['TOOLCHAIN'] + '-ar'
+
+if env['STATIC_LIBC_ROOT'] != '':
+    env['LINKFLAGS'].append('--static')
+    env['LIBPATH'] = [env['STATIC_LIBC_ROOT']]
 
 Export(['clean_envs'])
 SConscript('SConscript');
